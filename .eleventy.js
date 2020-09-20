@@ -6,6 +6,13 @@ const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
+
+
+// Custom additions
+const MinifyCSS = require("clean-css");
+
+
+
 module.exports = function(eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
@@ -32,6 +39,22 @@ module.exports = function(eleventyConfig) {
 
     return array.slice(0, n);
   });
+
+
+
+
+
+
+
+	// Custom
+	eleventyConfig.addFilter("minifyCSS", function(code) {
+		return new MinifyCSS({}).minify(code).styles;
+	});
+
+
+
+
+
 
   eleventyConfig.addCollection("tagList", function(collection) {
     let tagSet = new Set();
@@ -62,8 +85,9 @@ module.exports = function(eleventyConfig) {
     return [...tagSet];
   });
 
-  eleventyConfig.addPassthroughCopy("img");
-  eleventyConfig.addPassthroughCopy("css");
+	eleventyConfig.addPassthroughCopy("_includes/js");
+  eleventyConfig.addPassthroughCopy("images");
+  eleventyConfig.addPassthroughCopy("manifest.json");
 
   /* Markdown Overrides */
   let markdownLibrary = markdownIt({

@@ -1,0 +1,108 @@
+---
+layout: layouts/base.njk
+permalink: /
+---
+
+
+<div class="site-header site-header-homepage">
+	<div class="site-header-homepage-overlay">
+		<div class="site-header-homepage-content">
+			<h1>Write Beautiful Code</h1>
+			<p>Celestial is a new kind of framework designed for front-end developers. <span class="d-xl-block d-none"></span>Spend less time writing PHP and more time shipping UIs.</p>
+			<p>
+				{#<a href="{{ metadata.downloadLink }}" class="btn btn-primary btn-lg mx-3">Try It Out</a>#}
+				<a href="/documentation/" class="btn btn-primary btn-lg mx-3">Read the Docs</a>
+				<a href="/#learn-more" class="btn btn-outline-light btn-lg mx-3">Learn More</a>
+			</p>
+		</div>
+
+		<div class="homepage-photo-credit">Photo by <a href="https://unsplash.com/@krisroller?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener">Kristopher Roller</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener">Unsplash</a></div>
+
+
+
+		<div>
+			<img src="/images/celestial-homepage-graphic.png" alt="Screenshot of the Celestial Framework in action running on PHPStorm" class="site-header-homepage-image">
+		</div>
+	</div><!-- end header overlay -->
+</div><!-- end site header -->
+
+
+<div class="gray-bg">
+	<div id="learn-more" class="container">
+		<h2 class="text-center">One Zip Folder. No Build Tools. All Fun.</h2>
+
+		<div class="homepage-stepper">
+			<div class="stepper">
+
+				<div class="step">
+					<p class="step-number">1</p>
+					<p class="step-title">Download the sample project zip file</p>
+					<p>This zip contains all of the code needed to launch a fully functioning site. Inside you'll find a common header and footer file, sample pages like Homepage, About, and Contact, along with the dozens of built in functions like geocoding and encryption.</p>
+				</div>
+
+				<div class="step">
+					<p class="step-number">2</p>
+					<p class="step-title">Add in your project settings</p>
+					<p>Inside the zip, navigate into the <code>project-files</code> folder. Open the <code>framework-setup.php</code> file and add in information like your site title, site URL, and any third party libraries you need like Google's Recaptcha.</p>
+				</div>
+
+				<div class="step">
+					<p class="step-number">3</p>
+					<p class="step-title">Upload to your web server</p>
+					<p>Once you've configured the framework-setup file, upload the entire project to your web server. Set the document root of your domain or subdomain to /public and your new website will be working.</p>
+				</div><!-- end step -->
+
+			</div><!-- end stepper -->
+		</div><!-- end homepage stepper container -->
+
+
+		<p class="text-center">
+			{#<a href="{{ metadata.downloadLink }}" class="btn btn-primary btn-lg mx-3">Try It Out</a>#}
+			<a href="/documentation/" class="btn btn-outline-primary btn-lg mx-3">Read the Docs</a>
+		</p>
+	</div><!-- end container -->
+</div><!-- end gray bg -->
+
+
+<div id="contact" class="container text-center py-5">
+	<h2 class="mb-4">Need Help?</h2>
+
+	<div class="row justify-content-center">
+		<div class="col-lg-4 mb-4">
+			<p>Our team of expert developers can get your site up and running so you can spend more time building the UIs that you love.</p>
+		</div><!-- end col -->
+
+		<div class="w-100"></div>
+
+		<div class="col-lg-4">
+			<form name="celestial-docs-contact"
+						netlify
+						netlify-honeypot="testing-input"
+						method="POST">
+
+			<div class="form-group">
+				<label for="formName">Name</label>
+				<input type="text" class="form-control" id="formName" name="name">
+			</div><!-- end form group -->
+
+			<div class="form-group">
+				<label for="formEmail">Email</label>
+				<input type="text" class="form-control" id="formEmail" name="email">
+			</div><!-- end form group -->
+
+			<div class="form-group">
+				<label for="formMessage">Brief description of what you need</label>
+				<textarea class="form-control" id="formMessage" rows="4" name="message"></textarea>
+			</div><!-- end form group -->
+
+			<input type="hidden" name="request" value="contact-form">
+			<input type="hidden" name="recaptcha_response" id="recaptchaResponse">
+
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary btn-lg">Send</button>
+			</div><!-- end form group -->
+			</form>
+
+		</div><!-- end col -->
+	</div><!-- end row -->
+</div><!-- end gray bg -->

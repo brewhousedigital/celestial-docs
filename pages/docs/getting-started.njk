@@ -1,0 +1,41 @@
+---
+layout: layouts/docs.njk
+permalink: /documentation/getting-started/
+---
+
+
+
+<div class="row mb-3">
+    <div class="col-lg">
+        <h2>Getting Started Checklist</h2>
+    </div><!-- end col -->
+
+    <div class="col-lg-auto">
+
+    </div><!-- end col -->
+</div><!-- end row -->
+
+<p class="pb-5 border-bottom mb-5">Use this handy checklist to jumpstart your project! Check off each item as you go. It looks long but that's only cause it is super thorough. Better to have more information than not enough!</p>
+
+<div class="pb-5">
+<div class="stepper">
+
+    {% for item in page.gettingStarted %}
+    <div class="step">
+        <div class="step-number">
+            {#<input type="checkbox">#}
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck{{ loop.index }}">
+                <label class="custom-control-label" for="customCheck{{ loop.index }}"></label>
+            </div>
+        </div>
+        <p class="step-title">{{ item.title }}</p>
+
+        {% for paragraph in item.content %}
+            <p>{{ paragraph|raw }}</p>
+        {% endfor %}
+    </div><!-- end step -->
+    {% endfor %}
+
+</div><!-- end stepper -->
+</div><!-- end margin -->

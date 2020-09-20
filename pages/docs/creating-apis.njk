@@ -1,0 +1,316 @@
+---
+layout: layouts/docs.njk
+permalink: /documentation/creating-apis/
+sidebar: "creating-apis-sidebar"
+---
+
+
+
+
+<h2>Creating APIs</h2>
+
+<p>Creating new APIs on Celestial is an easy three step process!</p>
+
+<div class="row justify-content-around text-center mb-5">
+	<div class="col-lg-3">
+		<div class="card card-body">
+			<p>1</p>
+			<p>Create the HTML form or button</p>
+		</div><!-- end card -->
+	</div><!-- end col -->
+
+	<div class="col-lg-3">
+		<div class="card card-body">
+			<p>2</p>
+			<p>Create API endpoint</p>
+		</div><!-- end card -->
+	</div><!-- end col -->
+
+	<div class="col-lg-3">
+		<div class="card card-body">
+			<p>3</p>
+			<p>Create the javascript function</p>
+		</div><!-- end card -->
+	</div><!-- end col -->
+</div><!-- end row -->
+
+
+
+
+
+
+
+<h3 id="jump-api-form-walkthrough">Form Walkthrough</h3>
+<p>You can build your form using a built-in form generator. This streamlines your forms and makes sure that the APIs are consistent.</p>
+
+<pre class="language-twig"><code class="language-twig">{{ "{{" }} startForm("/api/test/", "post", "testAPIExample") }}
+    {{ "{{" }} submitFormButton("Test the API", "btn btn-outline-secondary") }}
+{{ "{{" }} endForm() }}</code></pre>
+
+<p>Turns into:</p>
+
+{% set htmlBlock1 %}
+	<form data-api-form="" action="/api/test/" method="post" data-callback="testAPIExample" enctype="multipart/form-data">
+		<button type="submit" class="btn btn-outline-secondary" data-text="Test the API">Test the API</button>
+	</form>
+{% endset %}
+<pre class="language-markup mb-5"><code class="language-markup">{{ htmlBlock1|escape }}</code></pre>
+
+<h3>Breaking down the form line by line</h3>
+<pre class="language-twig"><code class="language-twig">{{ "{{" }} startForm("/api/test/", "post", "testAPIExample") }}</code></pre>
+<p>The first parameter is the API URL endpoint. You will set this up in your backend after this step.</p>
+<p>The second parameter is what type of HTTP method you want to use. Its pretty easy to just use POST for these.</p>
+<p class="mb-5">The third parameter is your javascript callback function. Once this form is completed, Celestial will look for a function with that name, and run it for you. You will set this up in part 3 of the API example.</p>
+
+
+
+<pre class="language-twig"><code class="language-twig">{{ "{{" }} submitFormButton("Test the API", "btn btn-outline-secondary") }}</code></pre>
+<p>The first parameter is the text that you want to show up on the button. This supports HTML so you can add in icons or images here.</p>
+<p class="mb-5">The second parameter is the list of classes you'd like to apply to the button.</p>
+
+
+<pre class="language-twig"><code class="language-twig">{{ "{{" }} endForm() }}</code></pre>
+<p class="mb-5">No parameters on this one. This just adds a closing {{ '<' ~ '/form>' }} tag. Useful for keeping your IDE or code editor's code sniffing valid.</p>
+
+
+
+<h3 id="jump-api-form">Form Example</h3>
+<pre class="language-twig"><code class="language-twig">{{ "{{" }} startForm("/api/test/", "post", "testAPIExample") }}
+{% set htmlBlock2 %}
+	<h1>Contact Us</h1>
+	<input type="text" class="form-control mb-3" name="name" placeholder="Enter your name">
+{% endset %}
+		{{ htmlBlock2|escape }}
+		{{ "{{" }} submitFormButton("Test the API", "btn btn-outline-secondary") }}
+{{ "{{" }} endForm() }}</code></pre>
+
+<p class="">That's all you need to get started!</p>
+
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+
+<h3 id="jump-api-button">Button Example</h3>
+<p>Sometimes you need a button to do an action like deleting a user, marking a notification as 'read', or adding a friend to your account. You can do this in a similar manner to the form example by using a built-in function.</p>
+
+<p>This one has a few more options than the form so we'll break them down individually.</p>
+
+<pre class="language-twig"><code class="language-twig">{{ "{{ " }} APIButton('/api/test/', 'post', 'Test API', 'testAPIExample', 'btn btn-secondary') }}</code></pre>
+
+<ul class="mb-5">
+	<li>The first parameter is the API URL endpoint. You will set this up in your backend after this step.</li>
+	<li>The second parameter is what type of HTTP method you want to use. Its pretty easy to just use POST for these.</li>
+	<li>The third parameter is the text that you want to show up on the button. This supports HTML so you can add in icons or images here.</li>
+	<li>The fourth parameter is your javascript callback function. Once this form is completed, Celestial will look for a function with that name, and run it for you. You will set this up in part 3 of the API example.</li>
+	<li>The fifth parameter is the list of classes you'd like to apply to the button.</li>
+</ul>
+<p class="mb-5">The button example is essentially the Form and the Submit Button combined into one.</p>
+
+<p>When you call the above function, it will ouput:</p>
+
+{% set htmlBlock99 %}
+	<button class="btn btn-secondary"
+					type="button"
+					data-api-btn
+					data-action="/api/test/"
+					data-method="post"
+					data-text="Test API"
+					data-callback="testAPIExample"
+					data-processing="false">Test API</button>
+{% endset %}
+<pre class="language-markup mb-5"><code class="language-markup">{{ htmlBlock99|escape }}</code></pre>
+
+
+
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+
+
+
+
+<h3 id="jump-api-template">API Endpoint Template</h3>
+<p>Navigate to <code>project-files/site-apis.php</code>. Inside, you will find a similar setup to the <code>site-routes.php</code> file.</p>
+<p>APIs can be called using POST, PUT, PATCH, and DELETE. To keep things simple, you could just use POST method. You can read more about HTTP Methods on the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="noopener">Mozilla Developer Network</a>.</p>
+
+<pre class="language-php mb-5"><code class="language-php">// Your API name goes here and a description if you want.
+$Router->post('/api/api-url-here/', function () {
+    // Set your globals first
+
+    // Set response defaults in case of failure.
+
+    // Set your validations if you have any
+
+    // API Actions on the validated data
+
+    // If all previous actions were successful, build the response array
+
+    // Complete the API
+
+});</code></pre>
+
+
+
+
+<h3 id="jump-api-example">Example API</h3>
+<p>We want this API to fire on POST requests. We'll go line by line and show what its doing.</p>
+<pre class="language-php mb-5"><code class="language-php">// Test API
+$Router->post('/api/test/', function () {
+    // Set your globals first
+    global $Create;
+
+    // Set response defaults in case of failure.
+    $response = [];
+    $response['status'] = false;
+    $response['message'] = 'unable to complete request';
+
+    // Set your validations if you have any
+    // This API requires the form value 'name'. If it doesnt exist, the api will exit.
+    $name = $_POST['name'] ?? $Create->JSON($response);
+
+    // API Actions on the validated data
+    // Construct a message
+    $message = "Thank you for contacting us, " . $name;
+
+    // If all previous actions were successful, build the response array
+    $response['status'] = true;
+    $response['message'] = $message;
+
+    // Complete the API
+    $Create->JSON($response);
+});</code></pre>
+
+
+
+<h4>Calling Global Variables</h4>
+<pre class="language-php"><code class="language-php">global $Create;</code></pre>
+<p class="mb-5">$Create is one of a few built in functions that you can use on the site. In this case, we are looking for the method called 'JSON'. This method takes an array (the $response array that you will build), and automatically sets your correct headers and exits the API with the JSON data. We'll show that in more detail below.</p>
+
+
+
+<h4>Create the default response</h4>
+<pre class="language-php"><code class="language-php">// Set response defaults in case of failure.
+$response = [];
+$response['status'] = false;
+$response['message'] = 'unable to complete request';</code></pre>
+<p>This is useful if you require form values and the user misses one, or a malicious user isn't properly using the form. It will exit with two values: status, and message. You can use these in your javascript to perform actions such as highlighting missing form fields, or creating custom messaging for the user to see.</p>
+
+<p>This is also helpful for debugging your APIs because you can set a <code>$response['message']</code> for every validation you perform, and will be able to see which steps your API is breaking at.</p>
+
+<p class="mb-5">If you dont need to process form data, you can omit this.</p>
+
+
+
+<h4>Requiring form values</h4>
+<pre class="language-php"><code class="language-php">// This API requires the form value 'name'. If it doesnt exist, the api will exit.
+$name = $_POST['name'] ?? $Create->JSON($response);</code></pre>
+
+<p>Here, you can set the required form values for the API. In this example, it's looking for the 'name' value. If it doesnt exist, it will exit the API with the message you set above. It is using the PHP 7 'Null Coalescing Operator', which is an awesome and easy replacement to the <code>isset()</code> function.</p>
+
+<pre class="language-php"><code class="language-php">// Old way
+if(isset($_POST['name'])) {
+    $name = $_POST['name'];
+} else {
+    $Create->JSON($response);
+}
+
+// New way
+$name = $_POST['name'] ?? $Create->JSON($response);</code></pre>
+
+<p>You could also set it to return a default response by changing out the last part for a string (or anything).</p>
+
+<pre class="language-php"><code class="language-php">$name = $_POST['name'] ?? 'Super Developer';</code></pre>
+
+<p class="mb-5">If you need the additional flexibility using the traditional isset() method, feel free to use it.</p>
+
+
+
+
+<h4>The main API actions</h4>
+<pre class="language-php"><code class="language-php">// Construct a message
+$message = 'Thank you for contacting us, ' . $name;</code></pre>
+<p class="mb-5">This API example constructs a message saying "Thank you for contacting us, $name". Pretty simple. This area is where you would define all the actions that you could take. If you needed to update content in the database, those actions would be performed here.</p>
+
+
+
+
+
+<h4>Building the API response</h4>
+<pre class="language-php"><code class="language-php">// If all previous actions were successful, build the response array
+$response['status'] = true;
+$response['message'] = $message;</code></pre>
+<p class="mb-5">If all of your API actions (this example just has one) are successful, then build the final response to send to the user. This includes setting the <code>$response['status']</code> to <code>true</code>. You can also update the <code>$response['message']</code> for your javascript to read. This example just returns the user's name. </p>
+
+
+
+
+<h4>Completing the API</h4>
+<pre class="language-php"><code class="language-php">// Complete the API
+$Create->JSON($response);</code></pre>
+<p class="mb-5">With all the above completed, send the $response value in JSON format back to the client. Done!</p>
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+
+
+
+
+<h4 id="jump-api-postman" class="mb-3">Testing with Postman</h4>
+<div class="mb-3"><img src="/images/postman-api-example-1.png" alt="Example of Postman hitting the test API we built." class="img-fluid border rounded"></div>
+
+<p class="mb-5">You can test your new API by creating a new POST request on <a href="https://www.postman.com/" target="_blank" rel="noopener">Postman</a>. If you aren't familiar with Postman, it is a great, free, tool to test APIs. It can work with any website and has tons of options to customize your requests.</p>
+
+<ol>
+	<li>Set the URL to point to your API URL</li>
+	<li>Set the Body to be "form-data"</li>
+	<li>Set your required parameters (in this case, 'name')</li>
+	<li>Hit Send!</li>
+</ol>
+
+<p>If you aren't able to install Postman, you can use <a href="https://postwoman.io/" target="_blank" rel="noopener">Postwoman</a>, the online version of Postman.</p>
+
+
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+
+
+<h3 id="jump-api-js">Javascript Callback</h3>
+<p>Whenever you make an API request, you can let the user know with a javascript callback. When we wrote our form at the top, we added in "testAPIExample" as the javascript function. We can define that now!</p>
+<p>Navigate to <code>public/js/api-functions.js</code>. In here, you can define all of your callback functions.</p>
+
+<pre class="language-js"><code class="language-js">function testAPIExample(response, el, text) {
+    if(response['status']) {
+        el.innerText = "✔";
+        alert("Success!");
+
+    } else {
+        el.innerText = "✖";
+        alert("The input field for 'name' is missing!");
+    }
+}</code></pre>
+
+<p>When you define an API function, you get access to three things:</p>
+
+<ul>
+	<li><span class="font-weight-bold">response</span>: This is the JSON data sent from your API. You can use it to do conditional statements like the one above, showing a checkmark for success, and an X for a failure.</li>
+	<li><span class="font-weight-bold">el</span>: This is the button element that was interacted with. You can use this to show the user that an event is happening, has happened, or will happen. You can also ignore this and create your own notification system.</li>
+	<li><span class="font-weight-bold">text</span>: This is the original text of the button. This is useful if you are using the button to notify the user that an action has occurred. You can ignore this if you want and the button will return back to the previous text.</li>
+</ul>
+
+<p>Inside the function, you can do anything you want. Show a notification bar, animate a row on a table to disappear or to add, show sparkles across the page, and even change the user's site theme.</p>
+
+
+
+
+
+
+<div class="pb-5 mb-5 border-bottom"></div>

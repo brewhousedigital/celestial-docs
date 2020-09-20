@@ -1,0 +1,106 @@
+---
+layout: layouts/docs.njk
+permalink: /documentation/new-functions/
+---
+
+
+
+<h2>New Functions</h2>
+
+<p>If you need to build custom functions for your site, you can place them in the <code>project-files/site-functions.php</code> file.</p>
+
+<p>Here is an example of a function along with how to use it in Twig:</p>
+
+<pre class="language-php"><code class="language-php">// Generate a random number between two values.
+// Add this function to Twig to be used on the front-end.
+$Twig_generateRandomNumber =
+    new \Twig\TwigFunction('generateRandomNumber', function ($a, $b) {
+        return random_int($a, $b);
+    });
+$twig->addFunction($Twig_generateRandomNumber);</code></pre>
+
+<p>Using in Twig:</p>
+
+{% set htmlBlock1 %}
+	<div class="container">
+		<h1>Your random number is...</h1>
+		<h2>{{ "{{" }} generateRandomNumber(1, 100) }}</h2>
+	</div><!-- end container -->
+{% endset %}
+<pre class="language-markup"><code class="language-markup">{{ htmlBlock1|escape }}</code></pre>
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+{#<div class="row justify-content-center">
+    <div class="col-lg-4">
+        <div class="card card-body text-center">
+            <h1>Your random number is...</h1>
+            <h2>{{ generateRandomNumber(1, 100) }}</h2>
+        </div><!-- end card body -->
+    </div><!-- end col -->
+</div><!-- end row -->
+
+
+<div class="pb-5 mb-5 border-bottom"></div>#}
+
+
+<h3>Reusable HTML component example</h3>
+
+<p>Twig functions can come in handy for creating reusable components, because it keeps everything consistent and easy to make. Much like the form generator, you can create your own reusable pieces. This is an example of creating a common "back button" to put at the top of your pages, so the user can easily navigate back to where they came from without clicking the browser back button.</p>
+
+
+{% set htmlBlock2 %}// Reusable component: Back button
+	$Twig_backButton =
+	new \Twig\TwigFunction('backButton', function ($text, $url) {
+	return "
+	<div class="mb-3">
+		<a href='$url' class='btn btn-light'>⬅️&nbsp; $text</a>
+	</div>
+	";
+	}, ['is_safe' => ['html']]);
+	$twig->addFunction($Twig_backButton);{% endset %}
+
+<pre class="language-php"><code class="language-php">{{ htmlBlock2|escape }}</code></pre>
+
+
+<p>Using in Twig:</p>
+
+
+{% set htmlBlock3 %}
+	<div class="container">
+		{{ "{{" }} backButton("Documentation", "/documentation/") }}
+		<h1>Your Cool Site Title Here</h1>
+	</div><!-- end container -->
+{% endset %}
+
+<pre class="language-markup"><code class="language-markup">{{ htmlBlock3|escape }}</code></pre>
+
+<p>Turns into:</p>
+
+
+{% set htmlBlock4 %}
+	<div class="container">
+		<div class="mb-3">
+			<a href="/documentation/" class="btn btn-light">⬅️&nbsp; Documentation</a>
+		</div>
+		<h1>Your Cool Site Title Here</h1>
+	</div><!-- end container -->
+{% endset %}
+
+<pre class="language-markup"><code class="language-markup">{{ htmlBlock4|escape }}</code></pre>
+
+<p>The real usefulness comes from when you need to make a site-wide update. If your design changes to be a new back icon, it only takes one update to reflect across the entire site.</p>
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+
+{#{{ backButton("Documentation", "/documentation/") }}
+<h1>Your Cool Site Title Here</h1>
+
+
+
+<div class="pb-5 mb-5 border-bottom"></div>#}

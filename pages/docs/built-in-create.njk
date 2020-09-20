@@ -1,0 +1,363 @@
+---
+layout: layouts/docs.njk
+permalink: /documentation/built-in-create/
+sidebar: "built-in-create-sidebar"
+---
+
+<h2 class="mb-5">Built In Functions</h2>
+<h3 class="display-1">Create</h3>
+<p>Used to prepare data for use on the server or for a database</p>
+
+
+
+
+<div class="w-100 mb-5"></div>
+
+<pre id="jump-create-json" class="display-docs docs-psuedo-code">$Create->JSON($Response)</pre>
+<p class="small text-muted mb-4">Accepts: Array</p>
+
+<p>This method takes an array as its sole parameter, sets the HTTP Header to be application/json, encodes the array into JSON, and then exits with the response. You will typically use this at the end of an API call. When a user submits a form to update their profile name, you process the new name into the database. If that action was successful, return a response status "true", and a message for your javascript to interpret. You can see a working version of this in the Samples area.</p>
+
+<h4>Example</h4>
+
+<pre class="language-php"><code class="language-php">$response = [];
+$response['status'] = true;
+$response['message'] = 'API was successful!';
+$Create->JSON($response);</code></pre>
+
+<h4>Response</h4>
+
+<pre class="language-js"><code class="language-js">{
+    "status":true,
+    "message":"API was successful!"
+}</code></pre>
+
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-redirect" class="display-docs docs-psuedo-code">$Create->Redirect($Destination);</pre>
+<p class="small text-muted mb-4">Accepts: String</p>
+
+<p>Use this to redirect your users with ease. Its a very basic function.</p>
+
+<pre class="language-php"><code class="language-php">$Create->Redirect('/profile/');</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-number" class="display-docs docs-psuedo-code">$Create->Number(
+    $Number,
+    $Type = 'integer'
+);</pre>
+<p class="small text-muted mb-4">Accepts: String, Integer</p>
+
+<p>This uses a regex to remove all non-numeric characters. There is a separate Float method for decimals. You can use this method to return the value as an integer or as a string. This is useful for cleaning user input. Don't use this for currency or you'll get strange results.</p>
+
+<pre class="language-php"><code class="language-php">$Create->Number('000-111-2222');            // int 1112222
+$Create->Number('012-345-6789', 'string');  // string '0123456789'
+$Create->Number('2.0.5');                   // int 205
+$Create->Number('$100,000,000');            // int 100000000</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+<pre id="jump-create-float" class="display-docs docs-psuedo-code">$Create->Float(
+    $Number,
+    $DecimalPlace,
+    $Commas = false
+);</pre>
+<p class="small text-muted mb-4">Accepts: String, Integer</p>
+
+<p>This uses a regex to remove all non-numeric characters except for periods. You can use this to process monetary amounts. If you need commas, it will return as a string. If you don't, it will return as a float type.</p>
+<p>WARNING! This will round your decimal numbers if you shorten the number of available decimal places.</p>
+
+<pre class="language-php"><code class="language-php">$Create->Float('$1000.00', 2, false); // float 1000.00
+$Create->Float('$1000.00', 0, false); // float 1000
+$Create->Float('$1000.00', 2, true);  // string '1,000.00'
+$Create->Float('100.129', 2, false);  // float 100.13</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-phone" class="display-docs docs-psuedo-code">$Create->PhoneNumber($PhoneNumber);</pre>
+<p class="small text-muted mb-4">Accepts: String, Integer</p>
+
+<p>This uses a regex to remove all non-numeric characters to create a numeric phone number string. This is helpful for storing in the database in a consistent manner. It also checks to make sure the phone number is between 10 and 13 characters. To show the phone number on the client side, you can use the <a href="#" class="docs-psuedo-code text-decoration-none">$Show->PhoneNumber method</a>. This will format the phone number in a consistent manner.</p>
+
+<pre class="language-php"><code class="language-php">$Create->PhoneNumber('012-345-6789');      // string '0123456789'
+$Create->PhoneNumber('+1 (012) 345-6789'); // string '10123456789'
+$Create->PhoneNumber('+155 012.345.6789'); // string '1550123456789'</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-url" class="display-docs docs-psuedo-code">$Create->URL($URL);</pre>
+<p class="small text-muted mb-4">Accepts: String</p>
+
+<p>This uses a regex to remove all non-alphanumeric and replaces spaces with a dash. This is useful for automatically generating URLs for blog posts or other dynamic content to reference from a database.</p>
+
+<pre class="language-php"><code class="language-php">$Create->URL('My New Blog Post');               // 'my-new-blog-post'
+$Create->URL('Celestial Is $$ #)$*% Awesome');  // 'celestial-is-awesome'
+$Create->URL('   Lots   Of    Spaces');         // 'lots-of-spaces'</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+<pre id="jump-create-random" class="display-docs docs-psuedo-code">$Create->Random($Length = 60);</pre>
+<p class="small text-muted mb-4">Accepts: Integer</p>
+
+<p>This will create a random string of letters and numbers. This can be used to generate safe API keys, or file names for server storage. It can generate any length you need. The default length is 60 characters.</p>
+
+<pre class="language-php"><code class="language-php">$Create->Random();    // 60 character long string
+$Create->Random(12);  // 12 character long string
+$Create->Random(100); // 100 character long string</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-secure" class="display-docs docs-psuedo-code">$Create->Secure($ValueToEncrypt);</pre>
+<p class="small text-muted mb-4">Accepts: string, integer</p>
+
+<p>This encrypts any value for safe storage or transmission. You can use this to store secure communication on your database. To decrypt the message, you can use the <a href="#" class="docs-psuedo-code text-decoration-none">$Show->Secure method</a>. When you initially set up the framework, you can enter in an encryption key (recommended 60 characters), and also a 16 character long cipher initialization vector.</p>
+
+<pre class="language-php"><code class="language-php">echo $Create->Secure('Hello World'); // 'wLutBXhXdGntGeI='
+echo $Create->Secure('This is a secure transmission!'); // '3LaoGjceUCb+VfVz+TrA+n+Ju3cq0UgG1058Z85a'</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-money" class="display-docs docs-psuedo-code">$Create->MonetaryNumber($Amount);</pre>
+<p class="small text-muted mb-4">Accepts: string, integer</p>
+
+<p>This uses the previous float method to create a valid monetary amount (i.e. 10.00) and multiplies it by 100 to turn the float into an integer. This is how Stripe and other monetary systems store money in the database.</p>
+<p>$10 becomes 1000.</p>
+
+<pre class="language-php"><code class="language-php">$Create->MonetaryNumber('1,000.50'); // 100050
+$Create->MonetaryNumber('25.125'); // 2513
+$Create->MonetaryNumber('$25,000'); // 2500000</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-mail" class="display-docs docs-psuedo-code mb-4">$Create->Mail(
+    $To,
+    $Subject,
+    $EmailTemplate,
+    $EmailContent = [],
+    $Type = "mail"
+);</pre>
+{#<p class="small text-muted mb-4">Accepts: string, integer</p>#}
+
+<p>This method makes it super easy to send out an email using either your built in PHP mail() function, or the Mailgun API. With Mailgun, you get 1000 free emails a month. Super handy for testing.</p>
+
+<p>Enter in the address of who you are mailing, the subject, point to the mail template, build an array of custom dynamic values, and away you go! The mailing template automatically points to the project-files/emails folder and will append .html to the end so you only need to reference the name.</p>
+
+<h4>Example 1: No custom values.</h4>
+<p>By default, the method will use these dynamic values: __SITETITLE__, __YEAR__, and __SITEURL__. These are pulled from the values entered in through the framework-setup file.</p>
+<pre class="language-php"><code class="language-php">$Create->Mail(
+    "cool-new-user@website.com",  // to
+    "Welcome to Celestial",       // subject
+    "newsletter"                  // email template
+);</code></pre>
+
+
+{% set htmlBlock2 %}
+	<!doctype html>
+	<html>
+	<head><!-- email stuff here --></head>
+	<body>
+	<p>Thanks for contacting us at __SITETITLE__</p>
+
+	<p><a href="__SITEURL__/blog">Check out our blog</a></p>
+
+	<p>© __SITETITLE __YEAR__</p>
+	</body>
+	</html>
+{% endset %}
+<pre class="language-markup"><code class="language-markup">{{ htmlBlock2|escape }}</code></pre>
+
+<p class="mb-5">The included email template is based off of the excellent <a href="https://github.com/leemunroe/responsive-html-email-template" target="_blank" rel="noopener">leemunroe/responsive-html-email-template</a>. This email template has been tested on all major email clients.</p>
+
+
+<h4>Example 2: Custom Dynamic Values</h4>
+<p>You can enter in custom values through an array structured like so:</p>
+<pre class="language-php"><code class="language-php">$EmailContent = [
+    ["__NAME__", $_POST['name']],
+    ["__EMAIL__", $_POST['email']],
+    ["__MESSAGE__", $_POST['message']],
+];
+
+$Create->Mail(
+    "cool-new-user@website.com",   // to
+    "Welcome to Celestial",        // subject
+    "marketing/cool-email",        // email template
+    $EmailContent,                 // dynamic values
+    "mailgun"                      // email client
+);</code></pre>
+
+<p>You can then insert those dynamic values into your email and they will be replaced before being sent out to the recipient.</p>
+
+<pre class="language-markdown"><code class="language-markdown">Hello, __NAME__! Welcome to __SITETITLE__.</code></pre>
+
+<pre class="language-markdown"><code class="language-markdown">Hello, Catsuki! Welcome to Celestial.</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-recaptcha" class="display-docs docs-psuedo-code">$Create->Recaptcha($RecaptchaPostRequest);</pre>
+<p class="small text-muted mb-4">Accepts: string</p>
+
+<p>Recaptcha is used on every {{ "<" ~ "form>" }} by default. No setup necessary! Except for the API key. All you need to do is call this method on your API and it will do everything for you. You can store the response in a variable and save it in your database or return it to the client side for testing. If captcha fails, the form is not submitted, and you can use custom error messaging to redirect the suspected bot to another page.</p>
+
+<pre class="language-php"><code class="language-php">$Create->Recaptcha('recaptcha_response');</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-create-formvalidation" class="display-docs docs-psuedo-code">$Create->FormValidation(
+    $Post,
+    $Type = "string",
+    $Required = true
+);</pre>
+<p class="small text-muted mb-4">Accepts: all</p>
+
+<p>This is a handy method for quickly scaling up a form system. It can auto-validate several different types of data very quickly! You can also set whether form fields are required or not. You first define the empty $formValues array and then call the function on each $_POST value you want to validate.</p>
+
+<p>All Options:</p>
+<ul>
+    <li>string</li>
+    <li>password (forces string to be eight characters or longer)</li>
+    <li>phone</li>
+    <li>email</li>
+    <li>number</li>
+    <li>float</li>
+    <li>money</li>
+    <li>date</li>
+</ul>
+
+<p>Use the $_POST key (the name attribute on the html input fields) as the reference when you are storing these values. If any of the required fields fail, it will return that field value back as a JSON response, and you use that to find where the error happened on the page.</p>
+
+<pre class="language-php"><code class="language-php">$formValues = [];
+$formValues['name']    = $Create->FormValidation('form_name');
+$formValues['email']   = $Create->FormValidation('form_email', 'email');
+$formValues['message'] = $Create->FormValidation('form_message');
+$formValues['phone']   = $Create->FormValidation('form_phone', 'phone', false); // Not required
+$formValues['date']    = date('M d, Y g:i a');</code></pre>
+
+<p>If you want to save this information in your database, set the $formValues key to be the column name for the data you are entering. The connections to your database are secured through PDO by default.</p>
+
+<pre class="language-php"><code class="language-php">$db->insert(
+    'contact_us_form',
+    $formValues
+);</code></pre>
+
+<p>Easy peasy.</p>
+
+<div class="w-100 pb-5 mb-5"></div>
+

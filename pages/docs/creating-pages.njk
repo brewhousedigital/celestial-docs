@@ -1,0 +1,163 @@
+---
+layout: layouts/docs.njk
+permalink: /documentation/creating-pages/
+sidebar: "creating-pages-sidebar"
+---
+
+
+
+<h2 id="jump-page-page">Creating Pages</h2>
+
+<p>To create a new page in Celestial, navigate to <code>project-files/html</code> and create a new file <span class="d-lg-block d-none"></span>called <code>your-page-name.twig</code></p>
+
+<p class="mb-5">Twig is an easy to use PHP templating language. You can write your HTML normally and use Twig functions for fancy effects. It helps keep your website code clean by separating your front-end from your back-end.</p>
+
+<h3>Example of a twig page:</h3>
+
+{% set htmlBlock1 %}
+	<div class="container">
+		<h1>Hello World!</h1>
+		<h2>Welcome to Celestial Framework</h2>
+	</div><!-- end container -->
+{% endset %}
+
+<pre class="language-markup"><code class="language-markup">{{ htmlBlock1|escape }}</code></pre>
+
+<p class="mb-5">Easy right? HTML is fun.</p>
+
+<h3>Adding your page to the framework</h3>
+
+<p>When working with Celestial, you must define your pages as "routes". This helps you plan out your site and gives you a lot of flexibility in how you structure your files. If someone tries to navigate to a page that is not on your route list, they will get a 404 error.</p>
+
+<p>Inside the project-files folder is your site-routes.php file. Open this up!</p>
+
+<pre class="language-php"><code class="language-php">// My cool new page
+$Router->get('/your-new-page/', function () {
+    global $data;
+
+    $data['page']['title'] = 'My Awesome New Page';
+    $data['page']['template'] = 'your-page-name';
+});</code></pre>
+
+<p>Lets walk through this line by line.</p>
+
+<pre class="language-php"><code class="language-php">// My cool new page</code></pre>
+
+<p class="mb-5">The first one is just a comment that helps you find your pages.</p>
+
+
+<h3>Setting the page URL</h3>
+<pre class="language-php"><code class="language-php">$Router->get('/your-new-page/', function () {</code></pre>
+
+<p>Line two is how you add the link to the framework. "get" is an HTTP Method and is how you add links to your site. This is how the html anchor tag works behind the scenes. You should use GET for any normal page loads.</p>
+
+<p>There are other methods that we will explore later when you build APIs. You can read more about HTTP Methods on the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="noopener">Mozilla Developer Network</a>.</p>
+
+<p class="mb-5">The second part of line two is the callback function. This is where the magic happens!</p>
+
+<h3>Calling Global Variables</h3>
+<pre class="language-php"><code class="language-php">global $data;</code></pre>
+
+<p>Inside the callback function, you can reference all kinds of fun things. For all pages, calling the <code>global $data</code> value is required. If you have a page that needs access to the database, you would reference that by calling <code>global $db</code> for instance.</p>
+
+<p class="mb-5">You can read more about the global data object in its page on the sidebar.</p>
+
+
+<h3>Setting the page title</h3>
+<pre class="language-php"><code class="language-php">$data['page']['title'] = 'Documentation';</code></pre>
+<p class="mb-5">The $data value that was referenced earlier is a PHP array that contains a couple of things. One of them is the page title. If you remove this value, the default site title will be used.</p>
+
+
+
+
+<h3>Setting the page template</h3>
+<pre class="language-php"><code class="language-php">$data['page']['template'] = 'your-page-name';</code></pre>
+<p>The site will automatically look in the <code>project-files/html</code> folder for the name of your template and append <code>.twig</code> to the end. You can organize your templates in any manner you want.</p>
+<p>Examples:</p>
+<pre class="language-php mb-5"><code class="language-php">$data['page']['template'] = 'homepage';
+$data['page']['template'] = 'contact-us';
+$data['page']['template'] = 'blog/post';
+$data['page']['template'] = 'shop/category';
+$data['page']['template'] = 'shop/product';
+$data['page']['template'] = 'shop/cart';</code></pre>
+
+
+
+
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+
+
+
+
+
+<h2 id="jump-page-dynamic">Dynamic Pages</h2>
+<p>When you want to render a page but you dont know what the URL will be, you can add a colon before the name, and pass that as a variable to your callback function. In this example, we want the URL structure to be /blog/blog-title-here/. We can safely grab that value, check the database if it exists, and then return the page with all of the SQL content.</p>
+<pre class="language-php"><code class="language-php">// Blog Post
+$Router->get('/blog/:blogName/', function ($blogName) {
+    global $data;
+    global $db;
+
+    // This can pull from SQL, a folder on your server, or any place you want.
+    // We will dive into SQL Queries later
+    $getBlog = $db->SelectRow("SELECT * FROM Blogs WHERE blog_name = ?", [$blogName]);
+
+    $data['page']['title'] = '';
+    $data['page']['template'] = 'pages/blog';
+    // Create a new key on the global $data array called 'blog' and save the SQL contents there
+    $data['page']['blog'] = $getBlog;
+});</code></pre>
+
+<p>Once you've retrieved the blog SQL content, you can put it inside the global $data object with the key 'blog' (or any other name). This way, you can reference the values on your twig page like so:</p>
+
+{% set htmlBlock2 %}
+	<div class="container">
+		<h1>{{ "{{" }} page.blog.title {{ "}}" }}</h1>
+		<p>{{ "{{" }} page.blog.content {{ "}}" }}</p>
+	</div><!-- end container -->
+{% endset %}
+<pre class="language-twig"><code class="language-twig">{{ htmlBlock2|escape }}</code></pre>
+
+<p class="mb-5">With this example, you can call a specific blog post and render that content on the page. You can even build an IF Statement to check for specific blog ID's and render different templates for them. You be as creative as you want.</p>
+
+
+<h2 id="jump-page-fallback">Fallback Page</h2>
+<p>If you need to show a customized fallback page instead of your built in 404 page, you can do it with Twig! If you are running a tutorial site that needs URL changes, instead of 404ing old links, you could load up a message saying the tutorial has been updated and provide a new link to go to.</p>
+
+<p>We will use the same setup as the previous blog example for our hypothetical tutorial page.</p>
+
+
+<pre class="language-php mb-5"><code class="language-php">// Tutorial page
+$Router->get('/tutorial/:tutorialName/', function ($tutorialName) {
+    global $data;
+    global $db;
+
+    // Pull requested tutorial from SQL
+    $getTutorial = $db->SelectRow("SELECT * FROM Tutorials WHERE tutorial_name = ?", [$tutorialName]);
+
+    $data['page']['title'] = '';
+    $data['page']['template'] = 'pages/tutorial';
+    // Create a new key on the global $data array called 'blog' and save the SQL contents there
+    $data['page']['tutorial] = $getTutorial;
+});</code></pre>
+
+<h3>This would be our generic Tutorial page with a hypothetical sidebar and header</h3>
+
+{% set htmlblock5 %}
+	<div class="container">
+		<main>
+			{{ "{%" }} include [page.tutorial.url ~ '.twig', 'tutorial-not-found.twig'] %}
+		</main>
+
+		<aside>..content..</aside>
+	</div><!-- end container -->
+{% endset %}
+
+<pre class="language-twig"><code class="language-twig">{{ htmlblock5|escape }}</code></pre>
+
+<p>This twig function uses an array of values. You could even have multiple fallbacks if you needed. As long as they are between two square brackets, Twig will go from start to finish until it finds one to use.</p>
+
+<p>This piece, <code>page.tutorial.url ~ '.twig'</code> may seem a bit unfamiliar to Twig newcomers. Twig concatenates two strings together using the <code>~</code> symbol. So in that example, if the url was <code>/tutorial/how-to-build-a-celestial-page/</code>, Twig would try to find the template named <code>how-to-build-a-celestial-page.twig</code>. If it can't find it, it will render <code>tutorial-not-found.twig</code> instead. On the not-found page, you could say that the tutorials are frequently updated and to check the Tutorial homepage for more information (or whatever your use case calls for!).</p>

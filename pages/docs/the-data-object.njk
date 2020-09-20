@@ -1,0 +1,127 @@
+---
+layout: layouts/docs.njk
+permalink: /documentation/the-data-object/
+---
+
+
+<h2>The Data Object</h2>
+<p class="mb-5">The $data object is a collection of information about your site that can be accessed in your front-end. There are three levels that the data falls into.</p>
+
+<div class="row justify-content-around mb-5 text-center">
+    <div class="col-lg-3">
+        <div class="card card-body">
+        <p>Level 1</p>
+        <p class="mb-0">Site</p>
+        </div><!-- end card -->
+    </div><!-- end col -->
+
+    <div class="col-lg-3">
+        <div class="card card-body">
+        <p>Level 2</p>
+        <p class="mb-0">Page</p>
+        </div><!-- end card -->
+    </div><!-- end col -->
+
+    <div class="col-lg-3">
+        <div class="card card-body">
+        <p>Level 3</p>
+        <p class="mb-0">User</p>
+        </div><!-- end card -->
+    </div><!-- end col -->
+</div><!-- end row -->
+
+
+
+
+
+
+
+<h3 id="jump-data-site">$data['site']</h3>
+<p>The 'site' key contains information about the site as a whole, including the site name, description, meta data, URL, API keys, and anything that needs to be accessible on all pages.</p>
+
+<p>A few examples of what's contained </p>
+
+<ul>
+    <li><code>$data['site']['title']</code>: The Site Title. Typically used in the {{ "<title>"|escape }} tag and in emails.</li>
+    <li><code>$data['site']['description']</code>: The Site Description. Typically used in meta description tags, OpenGraph, and other SEO related tags.</li>
+    <li><code>$data['site']['baseURL']</code>: The URL of your website. This is used for generating absolute links in your site and in emails.</li>
+</ul>
+
+<p>You can add as many of these site values as you want! Navigate to <code>project-files/framework-setup.php</code> and add your values under the "Custom integrations and global variables" section at the bottom.</p>
+
+<p>Here is a list of the total values. Overwriting these may cause unintended effects so try to make unique ones if possible.</p>
+
+<div class="row justify-content-center mb-5">
+    <div class="col-auto"><code class="text-center d-block p-3">['title']</code></div>
+    <div class="col-auto"><code class="text-center d-block p-3">['description']</code></div>
+    <div class="col-auto"><code class="text-center d-block p-3">['metaThemeColor']</code></div>
+    <div class="col-auto"><code class="text-center d-block p-3">['openGraphImage']</code></div>
+    <div class="col-auto"><code class="text-center d-block p-3">['baseURL']</code></div>
+    <div class="col-auto"><code class="text-center d-block p-3">['fullURL']</code></div>
+    <div class="col-auto"><code class="text-center d-block p-3">['recaptchaPublishableKey']</code></div>
+    <div class="col-auto"><code class="text-center d-block p-3">['googleAnalytics']</code></div>
+</div><!-- end row -->
+
+
+
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+
+
+
+<h3 id="jump-data-page">$data['page']</h3>
+<p>The 'page' key contains information about the specific page that the user is on. This key comes with... nothing! This is what you set in your <code>project-files/site-routes.php</code> file.</p>
+
+<p>You can make as many custom values here to fit your page needs: SQL query data; PHP arrays; text; the time; date; whatever you can think of! The name of the key is how you reference in Twig.</p>
+
+<pre class="language-php"><code class="language-php">// My cool new page
+// project-files/site-routes.php
+$Router->get('/my-custom-page/', function () {
+    global $data;
+
+    $data['page']['title'] = 'My Awesome New Page';
+    $data['page']['template'] = 'my-custom-page';
+    $data['page']['myCustomName'] = 'Yuri Catsuki';
+    $data['page']['todaysDate'] = date("M d, Y");
+});</code></pre>
+
+{% set htmlBlock1 %}
+	<h1>Welcome, {{ "{{" }} page.myCustomName }}</h1>
+	<p>It is currently {{ "{{" }} page.todaysDate }}</p>
+{% endset %}
+<pre class="language-twig"><code class="language-twig">{{ htmlBlock1|escape }}</code></pre>
+
+<p>Turns into:</p>
+
+{% set htmlBlock2 %}
+	<h1>Welcome, {{ page.myCustomName }}</h1>
+	<p>It is currently {{ page.todaysDate }}</p>
+{% endset %}
+<pre class="language-twig"><code class="language-twig">{{ htmlBlock2|escape }}</code></pre>
+
+
+
+
+
+
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+
+
+
+
+
+
+<h3 id="jump-data-user">$data['user']</h3>
+<p>The 'user' key contains information about the specific user that is visiting your site. At a minimum, this key contains two values:</p>
+
+<ul>
+    <li><code>$data['user']['authenticated']</code>: By default this is set to false. If you expand your site to include authentication, this value will automatically change when the user is logged in.</li>
+    <li><code>$data['user']['ip']</code>: This is set to the user's IP address. Not 100% perfect but you can use it to show specific content based on general location or restricting content to a specific IP range.</li>
+</ul>
+
+<p class="mb-5">This 'user' key will get it's most use out of the authentication package that you can install with Celestial. It will store everything from your SQL tables about the user (i.e. name, address, phone number, preferences).</p>

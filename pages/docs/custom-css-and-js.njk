@@ -1,0 +1,15 @@
+---
+layout: layouts/docs.njk
+permalink: /documentation/custom-css-and-js/
+---
+
+
+<h2>CSS and JS</h2>
+
+<p>Inside your <code>public</code> folder you will find the traditional site folder structure. You can place all of your custom CSS, libraries, and other into the CSS folder and the same with the JS folder.</p>
+
+<p>Navigate to <code>project-files/html/templates/main-template.twig</code> and add in the <code>link</code> and <code>script</code> references there.</p>
+
+<div class="pb-5 mb-5 border-bottom"></div>
+
+<p>Some pitfalls with this approach is that for larger sites, its hard to organize your CSS files. In previous iterations of Celestial, there was a way to build CSS partials and the server would automatically combine and minify them for you. This worked when only a few users were on the site, but as users traffic went up, the site slowed down tremendously. Without using a build tool, its hard to construct a perfect, scalable CSS and JS manager.</p>

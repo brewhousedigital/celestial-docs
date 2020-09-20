@@ -1,0 +1,194 @@
+---
+layout: layouts/docs.njk
+permalink: /documentation/built-in-show/
+sidebar: "built-in-show-sidebar"
+---
+
+
+
+<h2 class="mb-5">Built In Functions</h2>
+<h3 class="display-1">Show</h3>
+<p>Used to prepare data for use on the client side</p>
+
+
+
+
+<div class="w-100 mb-5"></div>
+
+<pre id="jump-show-money" class="display-docs docs-psuedo-code">$Show->MonetaryNumber(
+    $Amount,
+    $Convert = true,
+    $Cents = true
+)</pre>
+<p class="small text-muted mb-4">Accepts: String</p>
+
+<p>This method takes a string and converts it to appear as a monetary value. You have the option to "convert" monetary numbers saved in the database to show the correct number of cents. Setting the cents parameter to false will remove the cents entirely.</p>
+
+<h4>Example</h4>
+
+<pre class="language-php"><code class="language-php">$Show->MonetaryNumber('1000');                // 10.00
+$Show->MonetaryNumber('1250');                // 12.50
+$Show->MonetaryNumber('125000', false);       // 125,000.00
+$Show->MonetaryNumber('1250', false, false);  // 1,250</code></pre>
+
+
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-show-phone" class="display-docs docs-psuedo-code">$Show->PhoneNumber(
+    $PhoneNumber,
+    $URL = false
+);</pre>
+<p class="small text-muted mb-4">Accepts: String</p>
+
+<p>This will process a string of numbers into a nicely formatted phone number that plays well with {{ "<" ~ "a href='tel:'>" }}. By default, the phone number will be formatted for a human to read it. You can set the parameter $URL to true to remove the spaces. Anything under 10 characters and anything over 13 characters will return a <code>null</code> value.</p>
+
+<pre class="language-php"><code class="language-php">$Show->PhoneNumber("1234567890");    //      123-456-7890
+$Show->PhoneNumber("11234567890");   //   +1 123-456-7890
+$Show->PhoneNumber("121234567890");  //  +12 123-456-7890
+$Show->PhoneNumber("1231234567890"); // +123 123-456-7890</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre id="jump-show-secure" class="display-docs docs-psuedo-code">$Show->Secure($ValueToDecrypt);</pre>
+<p class="small text-muted mb-4">Accepts: String</p>
+
+<p>This will decrypt any message that has been saved with the $Create->Secure() method.</p>
+
+<pre class="language-php"><code class="language-php">$Show->Secure("wLutBXhXdGntGeI="); // Hello World
+$Show->Secure("3LaoGjceUCb+VfVz+TrA+n+Ju3cq0UgG1058Z85a"); // This is a secure transmission!</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+<pre id="jump-show-image" class="display-docs docs-psuedo-code">$Show->Image($ImageName);</pre>
+<p class="small text-muted mb-4">Accepts: String</p>
+
+<p>This is useful for getting around images that may have been cached on your server. Typically when a user uploads a graphic with the same name, the original stays on their browser until it is cleared. Using this method, it will retrieve the timestamp of when the image was last edited, always showing you the most up-to-date version.</p>
+
+<p>This defaults to the /images/ folder</p>
+
+<pre class="language-php"><code class="language-php">$Show->Image("celestial-homepage-graphic.png");
+// '/images/celestial-homepage-graphic.png?v=1591324105'</code></pre>
+
+<div class="w-100 pb-5 mb-5"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#
+
+<pre class="language-php"><code class="language-php">// Test API
+$Router->post('/api/test/', function () {
+    global $Show;
+
+    // Create blank object
+    $response = [];
+
+    // Save POST values
+    $name = $_POST['name'] ?? "Missing Name";
+
+    // Construct a message
+    $message = "Welcome, " . $name;
+
+    // Build the response array
+    $response['status'] = true;
+    $response['message'] = $message;
+
+    // Complete the API
+    $Show->JSON($response);
+});</code></pre>
+
+
+
+<h4>Example 2: Better example. Saving a user's name to the database</h4>
+<pre class="language-php"><code class="language-php"></code></pre>
+#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<h3 id="jump-show">Useful methods for $Show</h3>#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#
+<h3 id="jump-restrict">Useful methods for $Restrict</h3>#}

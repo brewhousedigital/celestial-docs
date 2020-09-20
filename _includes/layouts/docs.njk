@@ -1,0 +1,46 @@
+---
+layout: layouts/base.njk
+navSmall: true
+---
+
+
+<div class="container-fluid py-5">
+	<div class="row">
+		<div class="col-lg" style="max-width: 235px;">
+			<h1>Docs</h1>
+			<div class="docs-sidebar">
+				<a href="/documentation/change-log/" class="">Change Log</a>
+				<a href="/documentation/setup-requirements/" class="">Setup Requirements</a>
+				<a href="/documentation/getting-started/" class="">Getting Started</a>
+				<div><hr></div>
+				<a href="/documentation/built-in-create/" class="">Built In - Create</a>
+				<a href="/documentation/built-in-show/" class="">Built In - Show</a>
+				<div><hr></div>
+				<a href="/documentation/creating-pages/" class="">Creating Pages</a>
+				<a href="/documentation/creating-apis/" class="">Creating APIs</a>
+				<a href="/documentation/the-data-object/" class="">The Data Object</a>
+				<a href="/documentation/custom-css-and-js/" class="">Custom CSS / JS</a>
+				<a href="/documentation/new-functions/" class="">New Functions</a>
+				{#<a href="/documentation/extending-functions/" class="">Extending Built In Functions</a>#}
+			</div><!-- end docs sidebar -->
+		</div><!-- end col -->
+
+		<div class="col-lg">
+			<div class="docs-content">
+				<div class="row">
+					<div class="col-lg pr-5">
+						{{ content | safe }}
+					</div><!-- end col -->
+
+					<div class="col-lg" style="max-width: 250px;">
+					<div class="docs-sidebar-secondary">
+						{% if sidebar %}
+						{% include "pages/docs/" + sidebar + ".njk" %}
+						{% endif %}
+						</div><!-- end secondary sidebar -->
+					</div><!-- end col -->
+				</div><!-- end row -->
+			</div><!-- end content -->
+		</div><!-- end col -->
+	</div><!-- end row -->
+</div><!-- end container -->
